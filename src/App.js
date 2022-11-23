@@ -3,6 +3,7 @@ import LineChart from "./components/LineChart";
 import BarChart from "./components/BarChart";
 import PieChart from "./components/PieChart";
 import Profile from "./components/Profile";
+import Loading from "./components/Loading";
 
 import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
@@ -22,6 +23,12 @@ function App() {
   const [account, setAccount] = useState({});
   const [isLoading, setisLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  // setAccount({
+  //   profile: {
+  //     profileName: "",
+  //   },
+  // });
 
   AWS.config.update({
     accessKeyId: process.env.REACT_APP_ACCESSKEYID,
@@ -140,23 +147,29 @@ function App() {
 
     console.log("nome achado :" + nname);
 
-    if (isOpen) setIsOpen(!isOpen);
-    else
-      axio
-        .get(command)
-        .then((response) => {
-          console.log(response.data.business_discovery);
-          //  let item = response.data.business_discovery;
-          makeCharts(response.data.business_discovery);
-          setisLoading(!isLoading);
-          setIsOpen(!isOpen);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    // if (isOpen) setIsOpen(!isOpen);
+    // else
+
+    axio
+      .get(command)
+      .then((response) => {
+        console.log(response.data.business_discovery);
+        //  let item = response.data.business_discovery;
+
+        makeCharts(response.data.business_discovery);
+
+        console.log("setando is open");
+        setisLoading(!isLoading);
+        setIsOpen(!isOpen);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function checkAccountExist() {
+    setisLoading(true);
+
     const commandCheck =
       "https://graph.facebook.com/" +
       ig_id +
@@ -164,6 +177,7 @@ function App() {
       name +
       ")&access_token=" +
       token;
+    // setisLoading(!isLoading);
 
     axio
       .get(commandCheck)
@@ -176,12 +190,16 @@ function App() {
       .catch((error) => {
         console.log(error);
         console.log("NAO existe");
+        //  setisLoading(!isLoading);
+        setisLoading(false);
         alert("This account doesn't exist or it is not a business/creator account.");
       });
+    //setisLoading(false);
+    // setisLoading(false);
   }
 
   const searchFace = useCallback(async () => {
-    //  setisLoading(!isLoading);
+    setisLoading(!isLoading);
     try {
     } catch (e) {
       console.error(e);
@@ -210,6 +228,7 @@ function App() {
         if (err) {
           alert("There is no face");
           //  setisLoading(!isLoading);
+          setisLoading(false);
           console.log(err, err.stack);
         } else {
           console.log(data);
@@ -217,10 +236,11 @@ function App() {
           //face didnt match
           if (data.FaceMatches.length === 0) {
             alert("Face no registered");
-            //   setisLoading(!isLoading);
+            setisLoading(false);
           } else {
             //  setNameFound(data.FaceMatches[0].Face.ExternalImageId);
             console.log(data.FaceMatches[0].Face.ExternalImageId);
+            console.log("chamando get face");
             // console.log("nome achado :" + nameFound);
             getAccount(data.FaceMatches[0].Face.ExternalImageId);
           }
@@ -231,13 +251,14 @@ function App() {
 
   const indexFace = useCallback(async () => {
     //if (checkAccountExist()) {
+
     const imageSrc = webcamRef?.current?.getScreenshot();
     const base64Img = imageSrc.replace("data:image/jpeg;base64,", "");
     const imgBuffer = Buffer.from(base64Img, "base64");
     //const imageId = uuid();
     const imageId = name;
     console.log("nome setado :" + name);
-    let haveFace = false;
+
     if (imageSrc) {
       //  setImgSrc(imageSrc);
 
@@ -256,8 +277,8 @@ function App() {
 
           console.log(data);
           console.log(data.FaceRecords.length);
-
-          if (data.FaceRecords.length > 0) haveFace = true;
+          setisLoading(false);
+          if (data.FaceRecords.length > 0) alert("Face successfully linked with @" + name + " account!");
           else alert("There is no face");
         }
       });
@@ -273,9 +294,18 @@ function App() {
   return (
     <div>
       <h3>Instagram stats ver 0.1</h3>
+
+      {isLoading ? (
+        <>
+          <Loading />
+        </>
+      ) : (
+        <></>
+      )}
       <div className="wrapper">
         <Webcam ref={webcamRef} audio={false} mirrored={true} screenshotFormat="image/jpeg" />
       </div>
+
       <div class="wrapper">
         <Button onClick={searchFace}>Search Face</Button>
       </div>
@@ -286,33 +316,29 @@ function App() {
           Index Face
         </Button>
       </div>
-      {/* <div>@ {nameFound}</div> */}
-      {isLoading ? (
-        <>
-          {" "}
-          <div>@ asdfasdfasdfasdf</div>
-          <Modal isOpen={isOpen}>
-            <ModalHeader toggle={toggle}>{account.profile.profileName}</ModalHeader>
-            <ModalBody>
-              <div className="row">
-                <div className="col-md-4 mb-5">
-                  <Profile person={account.profile} />
-                </div>
-                <div className="col-md-8 mb-5">
-                  <BarChart barData={account.barChart} />
-                </div>
-                <div className="col-md-4">
-                  <PieChart pieData={account.pieChart} name={account.profile.profileName} />
-                </div>
-                <div className="col-md-8">
-                  <LineChart lineChartData={account.lineChart} name={account.profile.profileName} />
-                </div>
+
+      {isOpen ? (
+        <Modal isOpen={isOpen}>
+          <ModalHeader toggle={toggle}>{account.profile.profileName}</ModalHeader>
+          <ModalBody>
+            <div className="row">
+              <div className="col-md-4 mb-5">
+                <Profile person={account.profile} />
               </div>
-            </ModalBody>
-          </Modal>
-        </>
+              <div className="col-md-8 mb-5">
+                <BarChart barData={account.barChart} />
+              </div>
+              <div className="col-md-4">
+                <PieChart pieData={account.pieChart} name={account.profile.profileName} />
+              </div>
+              <div className="col-md-8">
+                <LineChart lineChartData={account.lineChart} name={account.profile.profileName} />
+              </div>
+            </div>
+          </ModalBody>
+        </Modal>
       ) : (
-        <div>@ aaaaaa</div>
+        <></>
       )}
     </div>
   );
