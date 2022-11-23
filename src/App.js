@@ -278,8 +278,10 @@ function App() {
           console.log(data);
           console.log(data.FaceRecords.length);
           setisLoading(false);
-          if (data.FaceRecords.length > 0) alert("Face successfully linked with @" + name + " account!");
-          else alert("There is no face");
+          if (data.FaceRecords.length > 0) {
+            alert("Face successfully linked with @" + name + " account!");
+            setName("");
+          } else alert("There is no face");
         }
       });
       // }
