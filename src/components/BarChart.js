@@ -27,7 +27,9 @@ const BarChart = (props) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     layout: {
+      //   autoPadding: true,
       padding: {
         bottom: 30,
       },
@@ -63,8 +65,13 @@ const BarChart = (props) => {
         scales: { x, y },
       } = chart;
 
-      let picWidth = 100;
-      let picHeight = 120;
+      // //var meta = chart.BarChart.picHeight;
+      // console.log("qwerqwerqwrqwerqwerqwerqwerqwerqwer");
+      // console.log(x.chart.width);
+
+      let picWidth = x.chart.width / 6;
+      let picHeight = x.chart.width / 6;
+
       x.ticks.forEach((value, index) => {
         let xTop = x.getPixelForTick(index);
         let image = new Image();
