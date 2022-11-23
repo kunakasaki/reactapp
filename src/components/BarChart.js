@@ -25,13 +25,19 @@ const BarChart = (props) => {
   let offsetDataLebels2 = Math.max(...barData.map((el, i) => (i > 5 ? 0 : el.comments_count))) + 10;
   if (offsetDataLebels2 > offsetDataLebels) offsetDataLebels = offsetDataLebels2;
 
+  let pad = props.width / 6;
+  console.log("qwerqwerqwrqwerqwerqwerqwerqwerqwer");
+  console.log(pad);
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    //aspectRatio: 2,
+
     layout: {
-      //   autoPadding: true,
+      // autoPadding: true,
       padding: {
-        bottom: 30,
+        bottom: 40,
       },
     },
 
@@ -69,7 +75,7 @@ const BarChart = (props) => {
       // console.log("qwerqwerqwrqwerqwerqwerqwerqwerqwer");
       // console.log(x.chart.width);
 
-      let picWidth = x.chart.width / 6;
+      let picWidth = x.chart.width / 7;
       let picHeight = x.chart.width / 6;
 
       x.ticks.forEach((value, index) => {

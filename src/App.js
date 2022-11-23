@@ -331,7 +331,11 @@ function App() {
                 <BarChart barData={account.barChart} />
               </div>
               <div className="col-md-4">
-                <PieChart pieData={account.pieChart} name={account.profile.profileName} />
+                <PieChart
+                  pieData={account.pieChart}
+                  style="min-height:400px"
+                  name={account.profile.profileName}
+                />
               </div>
               <div className="col-md-8">
                 <LineChart lineChartData={account.lineChart} name={account.profile.profileName} />

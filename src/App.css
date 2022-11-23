@@ -45,6 +45,7 @@
 .barChart,
 .lineChart,
 .pieChart {
+  min-height: 400px;
   height: 100%;
   border: 2px solid beige;
   border-radius: 5px;
