@@ -33,6 +33,13 @@ const BarChart = (props) => {
     responsive: true,
     maintainAspectRatio: false,
     //aspectRatio: 2,
+    scales: {
+      x: {
+        ticks: {
+          display: false,
+        },
+      },
+    },
 
     layout: {
       // autoPadding: true,

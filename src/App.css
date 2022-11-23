@@ -42,9 +42,16 @@
   align-items: center;
   justify-content: center;
 }
-.barChart,
+
 .lineChart,
 .pieChart {
+  height: 100%;
+  border: 2px solid beige;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.barChart {
   min-height: 400px;
   height: 100%;
   border: 2px solid beige;
