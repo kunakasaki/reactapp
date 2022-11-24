@@ -1,12 +1,14 @@
 import styled from "styled-components";
 
 export const Background = styled.div`
-  width: 100vw;
-  height: 100vh;
+  position: fixed;
+  background: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
-  background: #ffffffb7;
   z-index: 999;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,6 +16,6 @@ export const Background = styled.div`
 `;
 
 export const LoadingText = styled.div`
-  font: 1rem "Noto Sans KR";
+  font: 3rem "Noto Sans KR";
   text-align: center;
 `;
