@@ -2,16 +2,7 @@ import React, { useRef } from "react";
 import videoIcon from "../play_video.png";
 import albumIcom from "../album_icon.jpg";
 import moment from "moment";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  SubTitle,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, SubTitle, Tooltip, Legend } from "chart.js";
 import { Bar, getElementAtEvent } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
@@ -44,7 +35,7 @@ const BarChart = (props) => {
     layout: {
       // autoPadding: true,
       padding: {
-        bottom: 40,
+        bottom: 60,
       },
     },
 
@@ -145,14 +136,7 @@ const BarChart = (props) => {
 
   return (
     <div className="barChart">
-      <Bar
-        id={"myCanvas" + name}
-        options={options}
-        plugins={[ChartDataLabels, barImage]}
-        onClick={onClick}
-        ref={chartRef}
-        data={data}
-      />
+      <Bar id={"myCanvas" + name} options={options} plugins={[ChartDataLabels, barImage]} onClick={onClick} ref={chartRef} data={data} />
     </div>
   );
 };
