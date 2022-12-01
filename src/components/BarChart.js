@@ -17,8 +17,6 @@ const BarChart = (props) => {
   if (offsetDataLebels2 > offsetDataLebels) offsetDataLebels = offsetDataLebels2;
 
   let pad = props.width / 6;
-  console.log("qwerqwerqwrqwerqwerqwerqwerqwerqwer");
-  console.log(pad);
 
   const options = {
     responsive: true,
