@@ -131,7 +131,9 @@ function App() {
 
   // function that retrieve json from a GET command call from instagram API
   function getAccount(nname) {
-    const command = "https://graph.facebook.com/" + ig_id + "?fields=business_discovery.username(" + nname + "){name,username,website,followers_count,media_count,media.limit(999999){timestamp,comments_count,like_count,media_type,permalink,caption,media_url}}&access_token=" + token;
+    const command = "https://graph.facebook.com/" + ig_id + "?fields=business_discovery.username(" + nname + "){name,username,followers_count,media_count,media.limit(9999){timestamp,comments_count,like_count,media_type,permalink,media_url}}&access_token=" + token;
+
+    //command = "https://graph.facebook.com/" + ig_id + "?fields=business_discovery.username(" + nname + "){name,username,followers_count,media_count,media.limit(99999){timestamp,comments_count,like_count,media_type}}&access_token=" + token;
 
     console.log("nome achado :" + nname);
 
@@ -139,7 +141,7 @@ function App() {
       .get(command)
       .then((response) => {
         // console.log(response.data.business_discovery);
-
+        console.log("PEGOU");
         // uses the response to make the charts
         makeCharts(response.data.business_discovery);
 
@@ -148,9 +150,67 @@ function App() {
         setIsOpen(!isOpen);
       })
       .catch((error) => {
+        setisLoading(false);
         console.log(error);
       });
   }
+
+  // // function that retrieve json from a GET command call from instagram API
+  //   function getAccount(nname) {
+  //     var one = {};
+  //     var two = {};
+  //     var all = {};
+
+  //     const command = "https://graph.facebook.com/" + ig_id + "?fields=business_discovery.username(" + nname + "){name,username,followers_count,media_count,media.limit(6){permalink,media_url}}&access_token=" + token;
+
+  //     console.log("nome achado :" + nname);
+
+  //     axio
+  //       .get(command)
+  //       .then((response) => {
+  //         // console.log(response.data.business_discovery);
+  //         console.log("PEGOU");
+
+  //         one = response.data.business_discovery;
+  //         // uses the response to make the charts
+  //         // makeCharts(response.data.business_discovery);
+  //         console.log(one);
+  //         // console.log("setando is open");
+  //         // setisLoading(!isLoading);
+  //         // setIsOpen(!isOpen);
+  //       })
+  //       .catch((error) => {
+  //         console.log("NAO PEGOU");
+  //         setisLoading(false);
+  //         console.log(error);
+  //       });
+
+  //     const command2 = "https://graph.facebook.com/" + ig_id + "?fields=business_discovery.username(" + nname + "){name,username,followers_count,media_count,media.limit(9999){timestamp,comments_count,like_count,media_type}}&access_token=" + token;
+
+  //     console.log("nome achado :" + nname);
+
+  //     axio
+  //       .get(command2)
+  //       .then((response) => {
+  //         // console.log(response.data.business_discovery);
+  //         console.log("PEGOU-2");
+  //         var mergedObj = response.data.business_discovery.concat(one);
+  //         //var mergedObj = one.concat(two);
+  //         // var mergedObj = { ...one, ...response.data.business_discovery };
+  //         console.log(mergedObj);
+  //         // uses the response to make the charts
+  //         makeCharts(mergedObj);
+  //         // two;
+  //         console.log("setando is open");
+  //         setisLoading(!isLoading);
+  //         setIsOpen(!isOpen);
+  //       })
+  //       .catch((error) => {
+  //         console.log("NAO PEGOU");
+  //         setisLoading(false);
+  //         console.log(error);
+  //       });
+  //   }
 
   // function that, using a GET call from instagram API, checks if the account entered on the input fields exists and procced with data indexing
   function checkAccountExist() {
@@ -178,7 +238,7 @@ function App() {
 
   // function that gets a picture from webcam and compare the face with a AWS collection faces previoulsy indexed
   const searchFace = useCallback(async () => {
-    setisLoading(!isLoading);
+    setisLoading(true);
     try {
     } catch (e) {
       console.error(e);
@@ -261,7 +321,7 @@ function App() {
           setisLoading(false);
           console.log(err, err.stack);
         } else {
-          console.log(data);
+          console.log(data.FaceDetails[0]);
           setisLoading(false);
         }
       });
