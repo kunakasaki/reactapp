@@ -228,6 +228,46 @@ function App() {
     }
   }, [webcamRef]);
 
+  // function that gets a picture from webcam and get face atrributes with a AWS rekogntion
+  const detectFace = useCallback(async () => {
+    setisLoading(!isLoading);
+    try {
+    } catch (e) {
+      console.error(e);
+      //  setisLoading(!isLoading);
+      throw new Error({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to index face",
+      });
+    }
+
+    // take a picture and convert to usable buffer
+    const imageSrc = webcamRef?.current?.getScreenshot();
+    const base64Img = imageSrc.replace("data:image/jpeg;base64,", "");
+    const imgBuffer = Buffer.from(base64Img, "base64");
+
+    if (imageSrc) {
+      var params = {
+        Image: {
+          Bytes: imgBuffer,
+        },
+        Attributes: ["ALL"],
+      };
+
+      // function that runs the rekognition feature
+      const res = await rekognition.detectFaces(params, function (err, data) {
+        if (err) {
+          // alert("There is no face");
+          setisLoading(false);
+          console.log(err, err.stack);
+        } else {
+          console.log(data);
+          setisLoading(false);
+        }
+      });
+    }
+  }, [webcamRef]);
+
   //function that index the face from the picture taken from webcam
   const indexFace = useCallback(async () => {
     const imageSrc = webcamRef?.current?.getScreenshot();
@@ -285,7 +325,7 @@ function App() {
         <></>
       )}
       <div className="wrapper">
-        <Webcam ref={webcamRef} audio={false} mirrored={true} screenshotFormat="image/jpeg" />
+        <Webcam ref={webcamRef} audio={false} mirrored={true} screenshotFormat="image/jpeg" onClick={detectFace} />
       </div>
 
       <div className="wrapper">
